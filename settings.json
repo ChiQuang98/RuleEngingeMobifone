@@ -1,0 +1,12 @@
+{
+  "NoderedAPI": {
+    "host_nodered": "10.16.150.132",
+    "post_nodered": 8010
+  },
+  "UrlAPI": {
+    "url_check_token": "/api-gw/v1/user/verify",
+    "url_save_flow": "/api-gw/v1/rule-chain/flow",
+    "url_get_flow": "/api-gw/v1/rule-chain/flow"
+  }
+}
+
