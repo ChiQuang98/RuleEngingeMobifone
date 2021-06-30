@@ -17,3 +17,4 @@ low\\";\\n        \\n    return[msg, msg];\\n// if(1){\\n//     return [null, ms
 console.log(s)
 s = s.replace(/\n/g, '').trim()
 console.log(s)
+//ss
