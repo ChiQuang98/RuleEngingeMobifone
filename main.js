@@ -10,7 +10,7 @@ var livereload  = require("connect-livereload");
 // Create an Express app
 var app = express();
 //session
-app.use(cors())
+// app.use(cors())
 app.use(session({
     resave: false,
     saveUninitialized: false,
@@ -49,16 +49,11 @@ app.use(settings.httpAdminRoot,RED.httpAdmin);
 app.use(settings.httpNodeRoot,RED.httpNode);
 app.use(livereload())
 app.get('/nodered/:token/:flowid', (req, res) => {
-    // console.log(req.params.token)
-    // console.log(req.params.flowid)
     req.session.token = req.params.token;
     req.session.flowid = req.params.flowid;
-    req.session.save()
-    console.log(" get "+ req.sessionID)
-
     req.session.save(function(err) {
         // session saved
-       return res.redirect('/red');
+       return res.redirect('/red')
     })
 
 });
@@ -66,7 +61,7 @@ app.post('/nodered', (req, res) => {
     // console.log(req.header.Authorization)
     console.log(req.get('authorization'))
     req.session.token = req.get('authorization');
-    res.redirect('/red');
+    res.redirect('/red?a=1');
     // /Qua
 
 });
