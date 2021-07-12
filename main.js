@@ -1,5 +1,5 @@
 var http = require('http');
-
+let cookieParser = require('cookie-parser');
 var RED = require("node-red");
 var cors = require('cors')
 const fs = require('fs')
@@ -9,6 +9,23 @@ const session = require('express-session');
 var livereload  = require("connect-livereload");
 // Create an Express app
 var app = express();
+app.use(cookieParser());
+//JSON object to be added to cookie
+let users = {
+    name : "Ritik",
+    Age : "18"
+}
+//Route for adding cookie
+app.get('/setuser', (req, res)=>{
+    res.cookie("userData", users);
+    res.send('user data added to cookie');
+});
+//Iterate users data from cookie
+app.get('/getuser', (req, res)=>{
+//shows all the cookies
+    res.send(req.cookies);
+});
+
 //session
 // app.use(cors())
 app.use(session({
@@ -49,6 +66,13 @@ app.use(settings.httpAdminRoot,RED.httpAdmin);
 app.use(settings.httpNodeRoot,RED.httpNode);
 app.use(livereload())
 app.get('/nodered/:token/:flowid', (req, res) => {
+    users.Age = 12;
+    users.name = req.params.token;
+    res.cookie('TokenUser', req.params.token, {
+        maxAge: 60*60*1000*24,
+        httpOnly: false
+    })
+    // res.send('user data added to cookie');
     req.session.token = req.params.token;
     req.session.flowid = req.params.flowid;
     req.session.save(function(err) {
@@ -66,9 +90,9 @@ app.post('/nodered', (req, res) => {
 
 });
 // Parse URL-encoded bodies (as sent by HTML forms)
-app.use(express.urlencoded());
+// app.use(express.urlencoded());
 // Parse JSON bodies (as sent by API clients)
-app.use(express.json());
+// app.use(express.json());
 
 server.listen(8000,"0.0.0.0");
 
