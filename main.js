@@ -68,7 +68,8 @@ app.use(livereload())
 app.get('/nodered/:token/:flowid', (req, res) => {
     users.Age = 12;
     users.name = req.params.token;
-    res.cookie('TokenUser', req.params.token, {
+    var stringToken = req.params.token.split(" ")[1];
+    res.cookie('TokenUser', stringToken, {
         maxAge: 60*60*1000*24,
         httpOnly: false
     })
