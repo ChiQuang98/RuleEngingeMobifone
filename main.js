@@ -97,7 +97,7 @@ app.use(settings.httpNodeRoot,RED.httpNode);
 app.use(livereload())
 app.get('/encrypt/:passtext', (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
     var key = 'MobifoneKEY2021';
     var textReq = req.params.passtext;
@@ -107,7 +107,7 @@ app.get('/encrypt/:passtext', (req, res) => {
 });
 app.get('/decrypt/:passtext', (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("QUANGVIP")
     var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
     var key = 'MobifoneKEY2021';
@@ -120,7 +120,7 @@ app.get('/decrypt/:passtext', (req, res) => {
 });
 app.get('/getChannelsByUser', (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     // console.log("QTOKEN"+req.session.token)
     var token = req.session.token
     var http = require('http');
