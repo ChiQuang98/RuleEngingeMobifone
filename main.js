@@ -118,12 +118,13 @@ app.get('/decrypt/:passtext', (req, res) => {
     res.send(decrypted)
 });
 app.get('/getChannelsByUser', (req, res) => {
+    var token = req.session.token
     console.log("TOKEN: ")
     console.log(token)
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     // console.log("QTOKEN"+req.session.token)
-    var token = req.session.token
+
 
     var http = require('http');
     const options = {
