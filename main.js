@@ -9,8 +9,6 @@ var crypto = require('crypto');
 var livereload  = require("connect-livereload");
 // Create an Express app
 var app = express();
-//session
-app.use(cors())
 app.use(cookieParser());
 //JSON object to be added to cookie
 let users = {
@@ -28,7 +26,8 @@ app.get('/getuser', (req, res)=>{
     res.send(req.cookies);
 });
 
-
+//session
+// app.use(cors())
 app.use(session({
     resave: false,
     saveUninitialized: false,
@@ -147,10 +146,11 @@ app.get('/getChannelsByUser', (req, res) => {
             console.log(response.statusCode);
             if (response.statusCode == 200) {
                 console.log("IN QUANG")
+                console.log(rs)
                 res.send(rs)
             }
             else {
-                res.send('Error')
+                res.send('Error get List')
                 console.log("OUT QUANG")
 
             }
