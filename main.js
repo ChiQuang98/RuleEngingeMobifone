@@ -9,6 +9,8 @@ var crypto = require('crypto');
 var livereload  = require("connect-livereload");
 // Create an Express app
 var app = express();
+//session
+app.use(cors())
 app.use(cookieParser());
 //JSON object to be added to cookie
 let users = {
@@ -26,8 +28,7 @@ app.get('/getuser', (req, res)=>{
     res.send(req.cookies);
 });
 
-//session
-app.use(cors())
+
 app.use(session({
     resave: false,
     saveUninitialized: false,
