@@ -122,6 +122,8 @@ app.get('/getChannelsByUser', (req, res) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     // console.log("QTOKEN"+req.session.token)
     var token = req.session.token
+    console.log("TOKEN: ")
+    console.log(token)
     var http = require('http');
     const options = {
         hostname: '10.16.150.132',
