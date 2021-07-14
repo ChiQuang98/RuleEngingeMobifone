@@ -9,10 +9,10 @@ var requestSync = require('sync-request');
 // console.log("22")
 
 
-var res = requestSync('GET', 'http://10.16.150.132:8010/api-gw/v1/rule-chain/flow/'+35, {
+var res = requestSync('GET', 'http://10.16.150.132:8010/api-gw/v1/channel/list-all', {
     headers: {
         'user-agent': 'example-user-agent',
-        'authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb2RlUmVkVXNlckBtb2JpZm9uZS52biIsImlhdCI6MTYyNTc5NzgyNCwiZXhwIjoxNjI1ODg0MjI0fQ.QvasTwlyldrk-jrIyMl8XwDRo6kNjBMjhEMAr7VWHTOwRAb0yrIaVXBF7HAXdWC3aG9pkhIlowlJ_DctkP1l8A`,
+        'authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb2RlUmVkVXNlckBtb2JpZm9uZS52biIsImlhdCI6MTYyNjE2OTQ4MSwiZXhwIjoxNjI2MjU1ODgxfQ.-0WIz7bi-Na0YIk7iBa32ve_kO1U5lx--GjKv38JsrU5ggIp5yg2Bx2qfhvR11Bkwd70VZt9L4gIBMt6WOqw8Qa`,
     },
 });
 // var finalData = JSON.stringify(JSON.parse(res.getBody('utf8')).message).replace(/\\/g, "");\

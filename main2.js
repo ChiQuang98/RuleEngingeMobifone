@@ -1,31 +1,36 @@
-const axios = require('axios').default;
-
-const sendGetRequest = async () => {
-    try {
-        const resp = await axios.get('http://localhost:8888/api-gw/v1/user/verify', {
-            headers: {
-                'authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dW5ndXllbkBnbWFpbGMub20iLCJpYXQiOjE2MjIxODc1NDMsImV4cCI6MTYyMjI3Mzk0M30.GJfq7xC6-KjCQ7RcWVUk4_zJmUH-gNaUj1hkfNBiJpXn2Dd3Hd7ylb13De_QYjezRONESUCL3AEkeD6M6EOXtg'
-            }
-        });
-
-        // console.log(resp.data);
-        return resp.data;
-    } catch (err) {
-        // Handle Error Here
-        console.error(err);
+var http = require('http');
+const options = {
+    hostname: '10.16.150.132',
+    port: '8010',
+    path: '/api-gw/v1/channel/list-all',
+    method: 'GET',
+    headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0dGNudHRAbW9iaWZvbmUudm4iLCJpYXQiOjE2MjYyMjcwNTksImV4cCI6MTYyNjMxMzQ1OX0.5i0E5EHwKA12SSWfyfa8ydKmgvEp8r9i8ckaXGJR72_YP1FYH-pGYXrT8Aq6PYXQSHXk5djHSkjlmsING2vGMA`
     }
-};
+}
+callback = function(response) {
+    var str = ''
+    response.on('data', function (chunk) {
+        str += chunk;
+    });
 
-const func = async () =>{
-    const res = await sendGetRequest();
+    response.on('end', function () {
+        var rs = JSON.parse(str)
+        // activeFlow = rs;
+        // return rs
+        console.log(rs)
+        // console.log(rs.errorCode);
+        console.log(response.statusCode);
+        if (response.statusCode == 200) {
+            console.log("IN QUANG")
 
-     console.log(res.message);
-     console.log("222");
+        }
+        else {
+            console.log("OUT QUANG")
 
- }
+        }
+    });
 
-func();
-
-console.log("333222");
-
-
+}
+var req1 = http.request(options, callback);
+req1.end();

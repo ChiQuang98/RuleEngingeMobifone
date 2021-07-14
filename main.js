@@ -5,7 +5,7 @@ var cors = require('cors')
 const fs = require('fs')
 var express = require("express");
 const session = require('express-session');
-
+var crypto = require('crypto');
 var livereload  = require("connect-livereload");
 // Create an Express app
 var app = express();
@@ -37,7 +37,36 @@ app.use(session({
     }
 })
 );
+// // Defining key
+// const key = crypto.randomBytes(32);
+// // Difining algorithm
+// const algorithm = 'aes-256-cbc';
+// // Defining iv
+// const IV_LENGTH = crypto.randomBytes(16);
+// // An encrypt function
+const ENCRYPTION_KEY = crypto.randomBytes(32); // Must be 256 bits (32 characters)
+const IV_LENGTH = 16; // For AES, this is always 16
+function encrypt(text) {
+    let iv = crypto.randomBytes(IV_LENGTH);
+    let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+    let encrypted = cipher.update(text);
 
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+    return iv.toString('hex') + '.' + encrypted.toString('hex');
+}
+
+function decrypt(text) {
+    let textParts = text.split('.');
+    let iv = Buffer.from(textParts.shift(), 'hex');
+    let encryptedText = Buffer.from(textParts.join('.'), 'hex');
+    let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+    let decrypted = decipher.update(encryptedText);
+
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+    return decrypted.toString();
+}
 // Add a simple route for static content served from 'public'
 app.use("/",express.static("public"));
 app.enable('trust proxy');
@@ -65,14 +94,90 @@ app.use(settings.httpAdminRoot,RED.httpAdmin);
 // Serve the http nodes UI from /api
 app.use(settings.httpNodeRoot,RED.httpNode);
 app.use(livereload())
+app.get('/encrypt/:passtext', (req, res) => {
+
+    var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+    var key = 'MobifoneKEY2021';
+    var textReq = req.params.passtext;
+    var cipher = crypto.createCipher(algorithm, key);
+    var encrypted = cipher.update(textReq, 'utf8', 'hex') + cipher.final('hex');
+    res.send(encrypted)
+});
+app.get('/decrypt/:passtext', (req, res) => {
+    console.log("QUANGVIP")
+    var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+    var key = 'MobifoneKEY2021';
+    var text = req.params.passtext;
+    // var encryptTxt = { iv: iv.toString('hex'),
+    //     encryptedData: text.toString('hex') }
+    var decipher = crypto.createDecipher(algorithm, key);
+    var decrypted = decipher.update(text, 'hex', 'utf8') + decipher.final('utf8');
+    res.send(decrypted)
+});
+app.get('/getChannelsByUser', (req, res) => {
+    // console.log("QTOKEN"+req.session.token)
+    var token = req.session.token
+    var http = require('http');
+    const options = {
+        hostname: '10.16.150.132',
+        port: '8010',
+        path: '/api-gw/v1/channel/list-all',
+        method: 'GET',
+        headers: {
+            Authorization: `${token}`
+        }
+    }
+    callback = function(response) {
+        var str = ''
+        response.on('data', function (chunk) {
+            str += chunk;
+        });
+        response.on('end', function () {
+            var rs = JSON.parse(str)
+            // activeFlow = rs;
+            // return rs
+            // console.log(rs)
+            // console.log(rs.errorCode);
+            console.log(response.statusCode);
+            if (response.statusCode == 200) {
+                console.log("IN QUANG")
+                res.send(rs)
+            }
+            else {
+                res.send('Error')
+                console.log("OUT QUANG")
+
+            }
+        });
+
+    }
+    var req1 = http.request(options, callback);
+    req1.end();
+    // res.send(decrypt(text))
+});
+
 app.get('/nodered/:token/:flowid', (req, res) => {
-    users.Age = 12;
-    users.name = req.params.token;
-    var stringToken = req.params.token.split(" ")[1];
-    res.cookie('TokenUser', stringToken, {
-        maxAge: 60*60*1000*24,
-        httpOnly: false
-    })
+// Encrypts output
+
+    // var stringToken = req.params.token.split(" ")[1];
+
+    // Encrypts output
+    // var output = encrypt(stringToken);
+    // console.log("====")
+    // console.log("EN:"+output);
+    // console.log("====")
+//
+// // Decrypts output
+//     console.log(decrypt(output));
+    // var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+    // var key = 'MobifoneKEY2021';
+    // var cipher = crypto.createCipher(algorithm, key);
+    // var encryptedToken = cipher.update(stringToken, 'utf8', 'hex') + cipher.final('hex');
+    // console.log("TOKENQUANG: "+encryptedToken)
+    // res.cookie('TokenUser',output, {
+    //     maxAge: 60*60*1000*24,
+    //     httpOnly: false
+    // })
     // res.send('user data added to cookie');
     req.session.token = req.params.token;
     req.session.flowid = req.params.flowid;
@@ -90,6 +195,7 @@ app.post('/nodered', (req, res) => {
     // /Qua
 
 });
+
 // Parse URL-encoded bodies (as sent by HTML forms)
 // app.use(express.urlencoded());
 // Parse JSON bodies (as sent by API clients)
