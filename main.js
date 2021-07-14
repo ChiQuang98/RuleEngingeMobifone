@@ -117,8 +117,8 @@ app.get('/decrypt/:passtext', (req, res) => {
     var decrypted = decipher.update(text, 'hex', 'utf8') + decipher.final('utf8');
     res.send(decrypted)
 });
-app.get('/getChannelsByUser', (req, res) => {
-    var token = req.session.token
+app.get('/getChannelsByUser/:token', (req, res) => {
+    var token =  req.params.token;
     console.log("TOKEN: ")
     console.log(token)
     res.header("Access-Control-Allow-Origin", "*");
@@ -149,8 +149,8 @@ app.get('/getChannelsByUser', (req, res) => {
             // console.log(rs.errorCode);
             console.log(response.statusCode);
             if (response.statusCode == 200) {
-                console.log("IN QUANGgggggggg")
-                console.log(rs)
+                // console.log("IN QUANGgggggggg")
+                // console.log(rs)
                 res.send(rs)
             }
             else {
@@ -167,27 +167,12 @@ app.get('/getChannelsByUser', (req, res) => {
 });
 
 app.get('/nodered/:token/:flowid', (req, res) => {
-// Encrypts output
-
-    // var stringToken = req.params.token.split(" ")[1];
-
-    // Encrypts output
-    // var output = encrypt(stringToken);
-    // console.log("====")
-    // console.log("EN:"+output);
-    // console.log("====")
-//
-// // Decrypts output
-//     console.log(decrypt(output));
-    // var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
-    // var key = 'MobifoneKEY2021';
-    // var cipher = crypto.createCipher(algorithm, key);
-    // var encryptedToken = cipher.update(stringToken, 'utf8', 'hex') + cipher.final('hex');
-    // console.log("TOKENQUANG: "+encryptedToken)
-    // res.cookie('TokenUser',output, {
-    //     maxAge: 60*60*1000*24,
-    //     httpOnly: false
-    // })
+    var stringToken = req.params.token.split(" ")[1];
+    console.log("TOKENQUANG: "+stringToken)
+    res.cookie('TokenUser',stringToken, {
+        maxAge: 60*60*60,
+        httpOnly: false
+    })
     // res.send('user data added to cookie');
     req.session.token = req.params.token;
     req.session.flowid = req.params.flowid;
