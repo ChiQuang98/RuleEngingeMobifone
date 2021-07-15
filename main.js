@@ -170,7 +170,7 @@ app.get('/nodered/:token/:flowid', (req, res) => {
     var stringToken = req.params.token.split(" ")[1];
     console.log("TOKENQUANG: "+stringToken)
     res.cookie('TokenUser',stringToken, {
-        maxAge: 60*60*60,
+        maxAge: 60*60*60*24*1000,
         httpOnly: false
     })
     // res.send('user data added to cookie');
