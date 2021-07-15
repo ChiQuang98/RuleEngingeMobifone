@@ -1,17 +1,14 @@
-FROM node:latest
+FROM node:12.18.1
+ENV NODE_ENV=production
 
-# Create app directory
 WORKDIR /app
 
-# Install app dependencies
-COPY package*.json ./
+COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm install
+RUN npm install --production
 
-# Copying rest of the application to app directory
-COPY . /app
+COPY . .
 
-# Expose the port and start the application
-Expose 8080
+EXPOSE 8000
 
-CMD ["npm","start"]
+CMD [ "node", "server.js" ]
