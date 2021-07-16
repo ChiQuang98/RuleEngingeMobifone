@@ -118,8 +118,9 @@ app.get('/decrypt/:passtext', (req, res) => {
     res.send(decrypted)
 });
 app.get('/getChannelsByUser/:token', (req, res) => {
+    console.log("TOKENHAHAHAHAHA: ")
     var token =  req.params.token;
-    console.log("TOKEN: ")
+    console.log("TOKENHIHIHIH: ")
     console.log(token)
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -165,14 +166,17 @@ app.get('/getChannelsByUser/:token', (req, res) => {
     req1.end();
     // res.send(decrypt(text))
 });
+app.get('/', (req, res) => {
+    res.send("Not found");
 
+});
 app.get('/nodered/:token/:flowid', (req, res) => {
     var stringToken = req.params.token.split(" ")[1];
     console.log("TOKENQUANG: "+stringToken)
     res.cookie('TokenUser',stringToken, {
         maxAge: 60*60*60*24*1000,
         httpOnly: false,
-        path:"/red"
+        path:"/"
     })
     // res.send('user data added to cookie');
     req.session.token = req.params.token;
@@ -196,7 +200,7 @@ app.post('/nodered', (req, res) => {
 // app.use(express.urlencoded());
 // Parse JSON bodies (as sent by API clients)
 // app.use(express.json());
-
+console.log("HOST"+process.env.HOST_SERVER)
 server.listen(8000,"0.0.0.0");
 
 RED.start();
